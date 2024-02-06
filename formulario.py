@@ -46,7 +46,7 @@ def login():
 
       return render_template('resultado.html', username=user, title="hola", email=email)
    else:
-      #user = request.args.get('name')
+      #user = request.args.get('name') si es
       return render_template('formulario.html')
 
 if __name__ == '__main__':

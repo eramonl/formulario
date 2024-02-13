@@ -4,77 +4,53 @@ from flask import request
 import sys
 from flask import Flask, redirect, url_for, request
 import mysql.connector
+import mail_dict
 app = Flask(__name__)
 
 
-lista = {
-"Mercedes":"mcast386@xtec.cat",
-"Rayane":"rayane@rayane.sa",
-"Mohamed":"moha@gmail.com",
-"Jad":"jad@gmail.com",
-"Oriol":"joam@gmail.com",
-"Elias":"hola123@gmail.com",
-"Armau":"arnau@gmail.com",
-"Asdrúbal":"asdrubal@gmail.com",
-"Adrian":"pedrosanchez@asix2.com",
-"Eric":"eric@gmail.com",
-"Emma":"pacosanz@gmail.com",
-"nishwan":"nishwan@gmail.com",
-"Javi":"javi@gmail.com",
-"Novel":"novelferreras49@gmail.com",
-"Bruno":"elcigala@gmail.com",
-"David":"argentino@gmail.com",
-"Judit":"judit@gmail.com",
-"Joao":"joao@gmail.com",
-"Laura":"laura@gmail.com",
-"enrico":"123@gmail.com",
-"Joel":"joelcobre@gmail.com",
-"Aaron":"aaron@gmail.com",
-"Moad":"moad@gmail.com"
-}
 
-class ConexionDB:
-    def __init__(self, host, user, password, database):
-      self.connection = mysql.connector.connect(
-         host=host,
-         user=user,
-         password=password,
-         database=database
-      )
+#NOTROBAT = "NOTROBAT"
+#AFEGIT = "AFEGIT"
+#MODIFICAT = "MODIFICAT"
+#JAEXISTEIX = "JAEXISTEIX"
 
+# def agregar_usuario(user):
+#        cursor = self.conexion.obtener_cursor()
+#        nombre = str(input("Ingresa el nombre del nuevo usuario: "))
+#        correo = str(input("Ingresa el correo del nuevo usuario: "))
+#        cursor.execute("INSERT INTO alumnos (Nombre, Correo) VALUES (%s, %s)", (nombre, correo))
+#        self.conexion.connection.commit()
+#        print("Usuario agregado correctamente.")
 
- def agregar_usuario(user):
-        cursor = self.conexion.obtener_cursor()
-        nombre = str(input("Ingresa el nombre del nuevo usuario: "))
-        correo = str(input("Ingresa el correo del nuevo usuario: "))
-        cursor.execute("INSERT INTO alumnos (Nombre, Correo) VALUES (%s, %s)", (nombre, correo))
-        self.conexion.connection.commit()
-        print("Usuario agregado correctamente.")
-
-def getmaillista(nom):
-    if nom in lista:
-        return lista[nom]
-    else:
-        return "No esta"
+#def getmaillista(nom):
+#    if nom in lista:
+#        return lista[nom]
+#    else:
+#        return "No esta"
 
 @app.route('/getmail',methods = ['POST', 'GET'])
-def login():
+def getmail():
    if request.method == 'POST':
-      user = request.form['name']
-      email = getmaillista(user)# Inicializar la variable de email a None
-
-      return render_template('resultado.html', username=user, title="hola", email=email)
+      nom = request.form["Nombre"]
+      nom = nom.capitalize() #en majúscules la primera lletra
+      correu = mail_dict.getmaildic(Nombre)
+      return render_template('resultadogettmail.html',nom=nom,correu=correu)
    else:
-      #user = request.args.get('name') si es
-      return render_template('formulario.html')
+      return render_template('getmail.html')
 
-@app.route('/agregar',methods = ['ADD'])
-   cursor = self.conexion.obtener_cursor()
-   nombre = str(input("Ingresa el nombre del nuevo usuario: "))
-   correo = str(input("Ingresa el correo del nuevo usuario: "))
-   cursor.execute("INSERT INTO alumnos (Nombre, Correo) VALUES (%s, %s)", (nombre, correo))
-   self.conexion.connection.commit()
-   print("Usuario agregado correctamente.")
+@app.route('/addmail',methods = ['POST', 'GET'])
+def addmail():
+   if request.method == 'POST':
+      modif=False
+      nom = request.form['nom']  #ull! si no ve, això acaba amb error
+      nom=nom.capitalize()
+      correu = request.form['correu']
+      if 'modif' in request.form: #el checkbox és opcional 
+         modif = True
+      result_msg = mail_dict.addmaildict(nom, correu, modif)
+      return render_template('resultadoddmail.html',nom = nom, correu=correu, result_msg = result_msg)
+   else:
+      return render_template('addmail.html')
 
 
 if __name__ == '__main__':

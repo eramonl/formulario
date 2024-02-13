@@ -43,7 +43,7 @@ class ConexionDB:
       )
 
 
- def agregar_usuario(self):
+ def agregar_usuario(user):
         cursor = self.conexion.obtener_cursor()
         nombre = str(input("Ingresa el nombre del nuevo usuario: "))
         correo = str(input("Ingresa el correo del nuevo usuario: "))
@@ -69,7 +69,12 @@ def login():
       return render_template('formulario.html')
 
 @app.route('/agregar',methods = ['ADD'])
-agregar_usuario
+   cursor = self.conexion.obtener_cursor()
+   nombre = str(input("Ingresa el nombre del nuevo usuario: "))
+   correo = str(input("Ingresa el correo del nuevo usuario: "))
+   cursor.execute("INSERT INTO alumnos (Nombre, Correo) VALUES (%s, %s)", (nombre, correo))
+   self.conexion.connection.commit()
+   print("Usuario agregado correctamente.")
 
 
 if __name__ == '__main__':

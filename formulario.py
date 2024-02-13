@@ -4,8 +4,9 @@ from flask import request
 import sys
 from flask import Flask, redirect, url_for, request
 import mysql.connector
-import mail_dict
+import mail_db
 app = Flask(__name__)
+
 
 
 
@@ -31,9 +32,9 @@ app = Flask(__name__)
 @app.route('/getmail',methods = ['POST', 'GET'])
 def getmail():
    if request.method == 'POST':
-      nom = request.form['nom']
+      nom = request.form['Nombre']
       nom = nom.capitalize() #en majúscules la primera lletra
-      correu = mail_dict.getmaildic(nom)
+      correu = mail_db.getmaildic(nom)
       return render_template('resultadogettmail.html',nom=nom,correu=correu)
    else:
       return render_template('getmail.html')
@@ -47,7 +48,7 @@ def addmail():
       correu = request.form['correu']
       if 'modif' in request.form: #el checkbox és opcional 
          modif = True
-      result_msg = mail_dict.addmaildict(nom, correu, modif)
+      result_msg = mail_db.addmaildict(nom, correu, modif)
       return render_template('resultadoddmail.html',nom = nom, correu=correu, result_msg = result_msg)
    else:
       return render_template('addmail.html')

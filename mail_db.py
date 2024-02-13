@@ -37,14 +37,12 @@ def conectdb():
 def getmaildic(nom):
       mydb = conectdb()
       if request.method == 'POST':
-            user = nom
             mycursos = mydb.cursor()
-            mycursos.execute("SELECT Correo FROM alumnos WHERE Nombre = %s",(user,))
+            mycursos.execute("SELECT Correo FROM alumnos WHERE Nombre = %s",(nom,))
             myresult = mycursos.fetchall()
             if myresult:
                   for x in myresult:
-                        mail=x
-                        return render_template('resultadogettmail.html',mail=mail,user=user)
+                        return x
             else:
                   return NOTROBAT
       else:

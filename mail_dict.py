@@ -2,7 +2,9 @@ import mysql.connector
 #definim en una variable de tipus dict, la clau serà el nom i el valor serà el email
 #posem els noms i els correus electrònics de la classe
 #CONSTANTS pel resultat de les fucions
+from flask import Flask, render_template, request
 
+app = Flask(__name__)
 
 class ConexionDB:
     def __init__(self, host, user, password, database):
@@ -32,10 +34,10 @@ def conectdb():
 
 # funció getmaildict rep el nom com paràmetre i retorna el mail
 # si no el troba retorna un string "NOTROBAT"
-def getmaildic(Nombre):
+def getmaildic(nom):
       mydb = conectdb()
       if request.method == 'POST':
-            user = request.form['Nombre']
+            user = nom
             mycursos = mydb.cursor()
             mycursos.execute("SELECT Correo FROM alumnos WHERE Nombre = %s",(user,))
             myresult = mycursos.fetchall()
@@ -46,7 +48,7 @@ def getmaildic(Nombre):
             else:
                   return NOTROBAT
       else:
-            return render_template('formulario.html')
+            return render_template('getmail.html')
 
 # addmaildict rep el nom i el email com paràmetres, i els afegeix al diccionari
 # si ja existeix retorna un string "JAEXISTEIX"

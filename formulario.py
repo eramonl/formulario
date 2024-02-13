@@ -31,9 +31,9 @@ app = Flask(__name__)
 @app.route('/getmail',methods = ['POST', 'GET'])
 def getmail():
    if request.method == 'POST':
-      nom = request.form["Nombre"]
+      nom = request.form['nom']
       nom = nom.capitalize() #en majúscules la primera lletra
-      correu = mail_dict.getmaildic(Nombre)
+      correu = mail_dict.getmaildic(nom)
       return render_template('resultadogettmail.html',nom=nom,correu=correu)
    else:
       return render_template('getmail.html')

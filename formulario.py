@@ -48,7 +48,7 @@ def addmail():
       correu = request.form['correu']
       if 'modif' in request.form: #el checkbox és opcional 
          modif = True
-      result_msg = .addmaildb(nom, correu, modif)
+      result_msg = mail_db.addmaildb(nom, correu, modif)
       return render_template('resultadoaddmail.html',nom = nom, correu=correu,  result_msg = result_msg)
    else:
       return render_template('addmail.html')

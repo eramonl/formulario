@@ -21,7 +21,7 @@ AFEGIT = "AFEGIT"
 MODIFICAT = "MODIFICAT"
 JAEXISTEIX = "JAEXISTEIX"
 
-# funció getmaildict rep el nom com paràmetre i retorna el mail
+# funció getmaildbt rep el nom com paràmetre i retorna el mail
 # si no el troba retorna un string "NOTROBAT"
 def conectdb():
       mydb = mysql.connector.connect(
@@ -32,9 +32,9 @@ def conectdb():
             )
       return mydb
 
-# funció getmaildict rep el nom com paràmetre i retorna el mail
+# funció getmaildbt rep el nom com paràmetre i retorna el mail
 # si no el troba retorna un string "NOTROBAT"
-def getmaildic(nom):
+def getmaildb(nom):
       mydb = conectdb()
       if request.method == 'POST':
             mycursos = mydb.cursor()
@@ -45,20 +45,18 @@ def getmaildic(nom):
                         return x
             else:
                   return NOTROBAT
-      else:
-            return render_template('getmail.html')
 
-# addmaildict rep el nom i el email com paràmetres, i els afegeix al diccionari
+# addmaildb rep el nom i el email com paràmetres, i els afegeix al diccionari
 # si ja existeix retorna un string "JAEXISTEIX"
 # quan va bé retorna string "AFEGIT"
 # si el paràmetre modif es True, quan ja existeix però és diferent, el modifica i retorna string "MODIFICAT"
-def addmaildict(nom,correu,modif=False):
-      oldcorreu = getmaildict(nom)
-      if oldcorreu == NOTROBAT:
-        diccionari[nom]=correu
-        return AFEGIT
-      elif (oldcorreu != correu and modif):
-        diccionari[nom]=correu
-        return MODIFICAT
-        return JAEXISTEIX
-   
+def addmaildb(nom,correu,modif=False):
+      mydb = conectdb()
+      result = getmaildb(nom)
+      mycursor = mydb.cursor()
+      mycursor.execute("INSERT INTO alumnos (Nombre, Correo) VALUES (%s, %s)", (nom, correu))
+      mydb.commit()
+      
+      print("Usuario agregado correctamente.")
+
+      
